@@ -95,6 +95,25 @@
             background: white;
             border-radius: 8px;
         }
+
+        .summary {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .summary span {
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .priority-high { color: red; font-weight: bold; }
+        .priority-medium { color: orange; font-weight: bold; }
+        .priority-low { color: green; }
     </style>
 </head>
 <body>
@@ -111,15 +130,26 @@
         <label>Study Date:</label>
         <input type="date" name="date" required>
 
+        <label>Priority:</label>
+        <select name="priority">
+            <option value="High">High</option>
+            <option value="Medium" selected>Medium</option>
+            <option value="Low">Low</option>
+        </select>
+
         <button type="submit">Add Task</button>
     </form>
 
     {% if tasks %}
+    <div class="summary">
+        Progress: <span>{{ tasks | selectattr('done') | list | length }} of {{ tasks | length }}</span> tasks completed
+    </div>
     <table>
         <tr>
             <th>Subject</th>
             <th>Topic</th>
             <th>Date</th>
+            <th>Priority</th>
             <th>Status</th>
             <th>Actions</th>
         </tr>
@@ -128,6 +158,7 @@
             <td>{{ task.subject }}</td>
             <td>{{ task.topic }}</td>
             <td>{{ task.date }}</td>
+            <td class="priority-{{ task.priority | lower }}">{{ task.priority }}</td>
             <td>{{ "Done ✅" if task.done else "Pending ⏳" }}</td>
             <td>
                 {% if not task.done %}

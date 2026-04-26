@@ -27,12 +27,14 @@ def add_task():
     subject = request.form.get("subject")
     topic = request.form.get("topic")
     date = request.form.get("date")
+    priority = request.form.get("priority", "Medium")
     if subject and topic and date:
         tasks.append({
             "id": len(tasks) + 1,
             "subject": subject,
             "topic": topic,
             "date": date,
+            "priority": priority,
             "done": False
         })
         save_tasks(tasks)
