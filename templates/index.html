@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Study Planner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 0 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        form input, form select {
+            width: 100%;
+            padding: 8px;
+            margin: 6px 0 14px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        form button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #45a049;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .done-row {
+            text-decoration: line-through;
+            color: gray;
+        }
+
+        a {
+            color: #4CAF50;
+            text-decoration: none;
+            margin-right: 8px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .delete-link {
+            color: red;
+        }
+
+        .no-tasks {
+            text-align: center;
+            color: gray;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>📚 Smart Study Planner</h1>
+
+    <form action="/add" method="POST">
+        <label>Subject:</label>
+        <input type="text" name="subject" placeholder="e.g. Mathematics" required>
+
+        <label>Topic to Study:</label>
+        <input type="text" name="topic" placeholder="e.g. Chapter 3 - Integration" required>
+
+        <label>Study Date:</label>
+        <input type="date" name="date" required>
+
+        <button type="submit">Add Task</button>
+    </form>
+
+    {% if tasks %}
+    <table>
+        <tr>
+            <th>Subject</th>
+            <th>Topic</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        {% for task in tasks %}
+        <tr class="{{ 'done-row' if task.done else '' }}">
+            <td>{{ task.subject }}</td>
+            <td>{{ task.topic }}</td>
+            <td>{{ task.date }}</td>
+            <td>{{ "Done ✅" if task.done else "Pending ⏳" }}</td>
+            <td>
+                {% if not task.done %}
+                <a href="/done/{{ task.id }}">Mark Done</a>
+                {% endif %}
+                <a href="/delete/{{ task.id }}" class="delete-link">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <div class="no-tasks">No tasks added yet. Add your first study task above!</div>
+    {% endif %}
+
+</body>
+</html>
